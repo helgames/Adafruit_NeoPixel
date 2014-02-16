@@ -47,10 +47,12 @@ Adafruit_NeoPixel::Adafruit_NeoPixel(uint16_t n, uint8_t p, uint8_t t) : numLEDs
   }
 }
 
+#ifndef NEOPIXEL_TINY_DRIVER
 Adafruit_NeoPixel::~Adafruit_NeoPixel() {
   if(pixels) free(pixels);
   pinMode(pin, INPUT);
 }
+#endif
 
 void Adafruit_NeoPixel::begin(void) {
   pinMode(pin, OUTPUT);
@@ -229,10 +231,12 @@ void Adafruit_NeoPixel::show(void) {
         [hi]     "r" (hi),
         [lo]     "r" (lo));
 
+#ifndef NEOPIXEL_TINY_DRIVER
     } else if(port == &PORTB) {
-
+#endif
 #endif // PORTD
 
+#ifndef NEOPIXEL_TINY_DRIVER
       // Same as above, just switched to PORTB and stripped of comments.
       hi = PORTB |  pinMask;
       lo = PORTB & ~pinMask;
@@ -309,6 +313,7 @@ void Adafruit_NeoPixel::show(void) {
       : [port] "I" (_SFR_IO_ADDR(PORTB)), [ptr] "e" (ptr), [hi] "r" (hi),
         [lo] "r" (lo));
 
+#endif // TINY
 #ifdef PORTD
     }    // endif PORTB
 #endif
@@ -440,10 +445,12 @@ void Adafruit_NeoPixel::show(void) {
           [hi]     "r" (hi),
           [lo]     "r" (lo));
 
+#ifndef NEOPIXEL_TINY_DRIVER
     } else if(port == &PORTB) {
-
+#endif
 #endif // PORTD
 
+#ifndef NEOPIXEL_TINY_DRIVER
       hi   = PORTB |  pinMask;
       lo   = PORTB & ~pinMask;
       next = lo;
@@ -492,6 +499,7 @@ void Adafruit_NeoPixel::show(void) {
         : [port] "I" (_SFR_IO_ADDR(PORTB)), [ptr] "e" (ptr), [hi] "r" (hi),
           [lo] "r" (lo));
 
+#endif // TINY
 #ifdef PORTD
     }
 #endif
@@ -792,6 +800,7 @@ void Adafruit_NeoPixel::show(void) {
   endTime = micros(); // Save EOD time for latch on next call
 }
 
+#ifndef NEOPIXEL_TINY_DRIVER
 // Set the output pin number
 void Adafruit_NeoPixel::setPin(uint8_t p) {
   pinMode(pin, INPUT);
@@ -803,7 +812,9 @@ void Adafruit_NeoPixel::setPin(uint8_t p) {
   pinMask = digitalPinToBitMask(p);
 #endif
 }
+#endif
 
+#ifndef NEOPIXEL_TINY_DRIVER
 // Set pixel color from separate R,G,B components:
 void Adafruit_NeoPixel::setPixelColor(
  uint16_t n, uint8_t r, uint8_t g, uint8_t b) {
@@ -828,6 +839,7 @@ void Adafruit_NeoPixel::setPixelColor(
     *p = b;
   }
 }
+#endif
 
 // Set pixel color from 'packed' 32-bit RGB color:
 void Adafruit_NeoPixel::setPixelColor(uint16_t n, uint32_t c) {
@@ -885,6 +897,7 @@ uint32_t Adafruit_NeoPixel::getPixelColor(uint16_t n) const {
   return 0; // Pixel # is out of bounds
 }
 
+#ifndef NEOPIXEL_TINY_DRIVER
 uint8_t *Adafruit_NeoPixel::getPixels(void) const {
   return pixels;
 }
@@ -892,6 +905,7 @@ uint8_t *Adafruit_NeoPixel::getPixels(void) const {
 uint16_t Adafruit_NeoPixel::numPixels(void) const {
   return numLEDs;
 }
+#endif
 
 // Adjust output brightness; 0=darkest (off), 255=brightest.  This does
 // NOT immediately affect what's currently displayed on the LEDs.  The

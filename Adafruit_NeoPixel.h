@@ -26,6 +26,9 @@
  #include <pins_arduino.h>
 #endif
 
+// Define this to get a smaller driver. It will only support WS2812 products at 800kHz!
+#define NEOPIXEL_TINY_DRIVER
+
 // 'type' flags for LED pixels (third parameter to constructor):
 #define NEO_GRB     0x01 // Wired for GRB data order
 #define NEO_COLMASK 0x01
@@ -34,7 +37,7 @@
 // Trinket flash space is tight, v1 NeoPixels aren't handled by default.
 // Remove the ifndef/endif to add support -- but code will be bigger.
 // Conversely, can comment out the #defines to save space on other MCUs.
-#ifndef __AVR_ATtiny85__
+#if ! defined(__AVR_ATtiny85__) && ! defined(NEOPIXEL_TINY_DRIVER)
 #define NEO_RGB     0x00 // Wired for RGB data order
 #define NEO_KHZ400  0x00 // 400 KHz datastream
 #endif
@@ -45,19 +48,27 @@ class Adafruit_NeoPixel {
 
   // Constructor: number of LEDs, pin number, LED type
   Adafruit_NeoPixel(uint16_t n, uint8_t p=6, uint8_t t=NEO_GRB + NEO_KHZ800);
+
+#ifndef NEOPIXEL_TINY_DRIVER
   ~Adafruit_NeoPixel();
+#endif
 
   void
     begin(void),
     show(void),
-    setPin(uint8_t p),
-    setPixelColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b),
     setPixelColor(uint16_t n, uint32_t c),
     setBrightness(uint8_t);
+#ifndef NEOPIXEL_TINY_DRIVER
+  void
+    setPin(uint8_t p),
+    setPixelColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b),
+#endif
+#ifndef NEOPIXEL_TINY_DRIVER
   uint8_t
    *getPixels() const;
   uint16_t
     numPixels(void) const;
+#endif
   static uint32_t
     Color(uint8_t r, uint8_t g, uint8_t b);
   uint32_t
