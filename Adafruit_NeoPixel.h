@@ -47,6 +47,7 @@ class Adafruit_NeoPixel {
  public:
 
   // Constructor: number of LEDs, pin number, LED type
+  Adafruit_NeoPixel(uint16_t n, uint8_t p, uint8_t t, uint8_t* pixels);
   Adafruit_NeoPixel(uint16_t n, uint8_t p=6, uint8_t t=NEO_GRB + NEO_KHZ800);
 
 #ifndef NEOPIXEL_TINY_DRIVER
